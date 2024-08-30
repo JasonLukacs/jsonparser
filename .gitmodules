@@ -1,0 +1,6 @@
+[submodule "lib/rapidjson"]
+	path = lib/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "lib/valijson"]
+	path = lib/valijson
+	url = https://github.com/tristanpenman/valijson

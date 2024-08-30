@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "exampleKey1": {
+      "type": "integer",
+      "minimum": -100,
+      "maximum": 100
+    },
+    "exampleKey2": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "exampleObject": {
+      "type": "object",
+      "patternProperties": {
+        ".+": {
+          "type": "object",
+          "properties": {
+            "exampleKey1": {
+              "type": "string",
+              "maxLength": 10
+            },
+            "exampleKey2": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "exampleKey1",
+            "exampleKey2"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "exampleKey1",
+    "exampleKey2",
+    "exampleObject"
+  ]
+}
