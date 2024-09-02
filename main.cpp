@@ -34,5 +34,5 @@ int main() {
 
     std::cout << "\nEnd of demo. Goodbye." << std::endl;
 
-    return 1;
+    return 0;
 }

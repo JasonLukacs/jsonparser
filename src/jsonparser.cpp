@@ -47,23 +47,6 @@ bool JSONParser::JSONValidate(const std::string& schema_file, const std::string&
     RapidJsonAdapter targetDocumentAdapter(targetDocument);
 
     if (!validator.validate(schema, targetDocumentAdapter, &results)) {  // Questionable error handling in valijson function.
-        // std::cerr << "Validation failed." << std::endl;
-        // ValidationResults::Error error;
-        // unsigned int errorNum = 1;
-        // while (results.popError(error)) {
-        //     std::string context;
-        //     //std::vector<std::string>::iterator itr = error.context.begin();
-        //     auto itr = error.context.begin();
-        //     for (; itr != error.context.end(); itr++) {
-        //         context += *itr;
-        //     }
-
-        //     std::cerr << "Error #" << errorNum << std::endl
-        //               << "  context: " << context << std::endl
-        //               << "  desc:    " << error.description << std::endl;
-        //     ++errorNum;
-        // }
-        // return false;
         std::string error_message = "JSON cannot be validated against schema.\n";
         error_message += "Using schema file: ";
         error_message += schema_file;
@@ -79,8 +62,6 @@ bool JSONParser::JSONValidate(const std::string& schema_file, const std::string&
                 context += *itr;
             }
 
-            // error_message += "\n";
-            // error_message += context;
             error_message += "\n";
             error_message += error.description;
         }
