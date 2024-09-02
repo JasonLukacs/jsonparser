@@ -4,3 +4,9 @@
 [submodule "lib/valijson"]
 	path = lib/valijson
 	url = https://github.com/tristanpenman/valijson
+[submodule "build/lib/valijson"]
+	path = build/lib/valijson
+	url = https://github.com/tristanpenman/valijson
+[submodule "build/lib/rapidjson"]
+	path = build/lib/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
