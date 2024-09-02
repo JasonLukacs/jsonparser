@@ -13,7 +13,6 @@
 #include <valijson/validation_results.hpp>
 
 #include "jsonparser.h"
-#include "exceptions.h"
 #include "utils.h"
 
 using valijson::Schema;

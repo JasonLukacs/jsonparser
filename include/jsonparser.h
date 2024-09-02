@@ -5,6 +5,8 @@
 
 #include <rapidjson/document.h>
 
+#include "exceptions.h"
+
 #define VALIJSON_USE_EXCEPTIONS
 
 class JSONParser {
