@@ -12,9 +12,6 @@
 
 
 int main() {
-    // Using example schema in /schema.
-    // Using example files in /config.
-
     bool validation_result = false;
     
     try
