@@ -15,4 +15,3 @@ add_executable(schemavalidator
   main.cpp  
   src/jsonparser.cpp
 )
-

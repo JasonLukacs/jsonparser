@@ -12,8 +12,8 @@
 #include <valijson/validator.hpp>
 #include <valijson/validation_results.hpp>
 
-#include "jsonparser.h"
-#include "utils.h"
+#include "JSONParser/jsonparser.h"
+#include "JSONParser/utils.h"
 
 using valijson::Schema;
 using valijson::SchemaParser;
