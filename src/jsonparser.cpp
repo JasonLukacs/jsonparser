@@ -12,14 +12,14 @@
 #include <valijson/validator.hpp>
 #include <valijson/validation_results.hpp>
 
-#include "JSONParser/jsonparser.h"
-#include "JSONParser/utils.h"
+#include <jsonparser.h>
+#include "utils.h"
 
-using valijson::Schema;
-using valijson::SchemaParser;
-using valijson::Validator;
-using valijson::ValidationResults;
-using valijson::adapters::RapidJsonAdapter;
+// using valijson::Schema;
+// using valijson::SchemaParser;
+// using valijson::Validator;
+// using valijson::ValidationResults;
+// using valijson::adapters::RapidJsonAdapter;
 
 
 bool JSONParser::JSONValidate(const std::string& schema_file, const std::string& target_file) const {
@@ -28,9 +28,9 @@ bool JSONParser::JSONValidate(const std::string& schema_file, const std::string&
     rapidjson::Document targetDocument = GetJSONDocument(target_file);
 
     // Parse the json schema into an internal schema format.
-    Schema schema;
-    SchemaParser parser;
-    RapidJsonAdapter schemaDocumentAdapter(schemaDocument);
+    valijson::Schema schema;
+    valijson::SchemaParser parser;
+    valijson::adapters::RapidJsonAdapter schemaDocumentAdapter(schemaDocument);
     try {
         parser.populateSchema(schemaDocumentAdapter, schema); // Questionable error handling in valijson function.
     } catch (std::runtime_error& e) {  // catch what is thrown by valijson.
@@ -41,9 +41,9 @@ bool JSONParser::JSONValidate(const std::string& schema_file, const std::string&
     }
 
     // Perform validation
-    Validator validator(Validator::kStrongTypes);
-    ValidationResults results;
-    RapidJsonAdapter targetDocumentAdapter(targetDocument);
+    valijson::Validator validator(valijson::Validator::kStrongTypes);
+    valijson::ValidationResults results;
+    valijson::adapters::RapidJsonAdapter targetDocumentAdapter(targetDocument);
 
     if (!validator.validate(schema, targetDocumentAdapter, &results)) {  // Questionable error handling in valijson function.
         std::string error_message = "JSON cannot be validated against schema.\n";
@@ -53,7 +53,7 @@ bool JSONParser::JSONValidate(const std::string& schema_file, const std::string&
         error_message += target_file;
         error_message += "\nError:\n ";
         
-        ValidationResults::Error error;
+        valijson::ValidationResults::ValidationResults::Error error;
         while (results.popError(error)) {
             std::string context;
             auto itr = error.context.begin();

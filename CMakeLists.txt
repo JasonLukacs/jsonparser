@@ -4,9 +4,10 @@ project(json_parser)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+set(CMAKE_EXPORT_COMPILE_COMMANDS)
 
 include_directories(
-  include
+  include/JSONParser
   lib/valijson/include
   lib/rapidjson/include
 )

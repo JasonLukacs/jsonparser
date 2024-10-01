@@ -6,7 +6,7 @@
  */
 #include <iostream>
 
-#include "JSONParser/jsonparser.h"
+#include "jsonparser.h"
 
 
 int main() {
