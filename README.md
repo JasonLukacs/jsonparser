@@ -1,29 +1,21 @@
-# jsonparser 
-## A simple json parser / validator using rapidjson and valijson
+## jsonparser 
+A simple json parser / validator using rapidjson and valijson
 
-## Usage:
-Clone the repo:  
-    git clone https://github.com/JasonLukacs/jsonparser.git
-Initialize the submodules:  
+### Usage:
+* Clone the repo:  
+    git clone https://github.com/JasonLukacs/jsonparser.git  
+  
+* Initialize the submodules:  
     git submodule update --init
-_Note: The submodules contain pretty large nested submodules which are not required,_
-_so avoid (git clone) --recurse-submodules and (git submodule update --init) --recursive_
-
-Include the header:  
-```cpp
-#include "jsonparser.h"
-```
-
-Perform a simple validation:  
-```cpp
-JSONParser parser;
-bool validation_result = parser.validate("schema.json", "json.json");
-
-if (validation_result) {
-    // Succes
-} else {
-    // Failure
-}
+  
+_Note: The submodules contain pretty large nested submodules which are not required,_  
+_so you may want to avoid --recurse-submodules / --recursive._
+  
+Study, build and run example program ``` main.cpp```:
+```console
+cd build
+make
+bin/schemavalidator
 ```
 
 ## Also see:
