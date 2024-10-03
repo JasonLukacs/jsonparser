@@ -16,15 +16,3 @@ add_executable(schemavalidator
   main.cpp  
   src/jsonparser.cpp
 )
-
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/.git/modules")
-    # If the .git/modules directory doesn't exist, the submodules are not initialized
-    message(WARNING "Submodules are not initialized. Running 'git submodule init' and 'git submodule update'.")
-    add_custom_command(
-        TARGET ${PROJECT_NAME}
-        PRE_BUILD
-        COMMAND git submodule init
-        COMMAND git submodule update --recursive
-        COMMENT "Initializing and updating submodules"
-    )
-endif()
