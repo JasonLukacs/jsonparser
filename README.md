@@ -6,8 +6,8 @@ Clone the repo:
     git clone https://github.com/JasonLukacs/jsonparser.git
 Initialize the submodules:  
     git submodule update --init
-__Note: The submodules contain pretty large nested submodules which are not required,__
-__so avoid (git clone) --recurse-submodules and (git submodule update --init) --recursive__
+_Note: The submodules contain pretty large nested submodules which are not required,_
+_so avoid (git clone) --recurse-submodules and (git submodule update --init) --recursive_
 
 Include the header:  
 ```cpp
