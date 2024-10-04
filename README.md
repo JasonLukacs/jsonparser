@@ -11,11 +11,11 @@ A simple json parser / validator using rapidjson and valijson
 _Note: The submodules contain pretty large nested submodules which are not required,_  
 _so you may want to avoid --recurse-submodules / --recursive._
   
-Study, build and run example program ``` main.cpp```:
+Study, build and run example program ``` demo.cpp```:
 ```console
 cd build
 make
-bin/schemavalidator
+bin/demo
 ```
 
 ## Also see:

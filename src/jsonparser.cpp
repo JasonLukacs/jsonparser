@@ -11,25 +11,39 @@
 #include <fstream>
 
 bool JSONParser::validate(const std::string &schema_file,
-                          const std::string &target_file) const {
+                          const std::string &target_file) {
+
   // Load files into rapidjson documents.
-  rapidjson::Document schemaDocument = getDocument(schema_file);
-  rapidjson::Document targetDocument = getDocument(target_file);
+  rapidjson::Document schemaDocument;
+  rapidjson::Document targetDocument;
+  try {
+    schemaDocument = getDocument(schema_file);
+    targetDocument = getDocument(target_file);
+  } catch (const JSONParserException &e) {
+    lastError = e.what();
+    if (enableExceptions) {
+      throw JSONParserException(lastError);
+    } else {
+      return false;
+    }
+  }
 
   // Parse the json schema into an internal schema format.
   valijson::Schema schema;
   valijson::SchemaParser parser;
   valijson::adapters::RapidJsonAdapter schemaDocumentAdapter(schemaDocument);
   try {
-    parser.populateSchema(
-        schemaDocumentAdapter,
-        schema);
+    parser.populateSchema(schemaDocumentAdapter, schema);
   } catch (std::runtime_error &e) { // catch what is thrown by valijson.
-    std::string cwd = std::filesystem::current_path().string();
     std::string error_message =
         "Error parsing schema. Library valijson returns: \n";
     error_message += e.what();
-    throw JSONParserException(error_message);
+    if (enableExceptions) {
+      throw JSONParserException(error_message);
+    } else {
+      lastError = error_message;
+      return false;
+    }
   }
 
   // Perform validation
@@ -37,7 +51,6 @@ bool JSONParser::validate(const std::string &schema_file,
   if (valijson::ValidationResults results; !validator.validate(
           schema, valijson::adapters::RapidJsonAdapter(targetDocument),
           &results)) {
-
     std::string error_message = "\nJSON cannot be validated against schema:\n";
 
     // Iterate through validation errors and gather detailed information
@@ -59,7 +72,12 @@ bool JSONParser::validate(const std::string &schema_file,
     error_message += target_file;
     error_message += "\n";
 
-    throw JSONParserException(error_message);
+    if (enableExceptions) {
+      throw JSONParserException(error_message);
+    } else {
+      lastError = error_message;
+      return false;
+    }
   }
   return true;
 }
@@ -116,3 +134,11 @@ rapidjson::Document JSONParser::getDocument(std::string_view file_name) const {
 
   return document;
 }
+
+bool JSONParser::disableExceptions() {
+  enableExceptions = false;
+
+  return true;
+}
+
+std::string JSONParser::getLastError() const { return lastError; }
