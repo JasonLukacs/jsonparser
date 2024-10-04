@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(json_parser)
+project(jsonparser)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -14,6 +14,23 @@ include_directories(
 )
 
 add_executable(demo
-  demo.cpp  
+  demo/demo.cpp  
   src/jsonparser.cpp
+)
+
+# Copy demo files.
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/demofiles/)
+
+add_custom_command(
+    TARGET demo
+    PRE_BUILD
+    COMMAND cp ../demo/demofiles/schema_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/json_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/schema_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/json_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    
+    DEPENDS ../demo/demofiles/schema_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/json_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/schema_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/json_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
 )
