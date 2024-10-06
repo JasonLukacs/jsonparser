@@ -8,6 +8,7 @@
 #include <valijson/validator.hpp>
 
 #include "jsonparser.h"
+#include <filesystem>
 #include <fstream>
 
 bool JSONParser::validate(const std::string &schema_file,
@@ -17,8 +18,8 @@ bool JSONParser::validate(const std::string &schema_file,
   rapidjson::Document schemaDocument;
   rapidjson::Document targetDocument;
   try {
-    schemaDocument = getDocument(schema_file);
-    targetDocument = getDocument(target_file);
+    schemaDocument = loadDocument(schema_file);
+    targetDocument = loadDocument(target_file);
   } catch (const JSONParserException &e) {
     lastError = e.what();
     if (enableExceptions) {
@@ -51,7 +52,8 @@ bool JSONParser::validate(const std::string &schema_file,
   if (valijson::ValidationResults results; !validator.validate(
           schema, valijson::adapters::RapidJsonAdapter(targetDocument),
           &results)) {
-    std::string error_message = "\nJSON cannot be validated against schema:\n";
+    std::string error_message =
+        "\nError - File cannot be validated against schema: ";
 
     // Iterate through validation errors and gather detailed information
     valijson::ValidationResults::ValidationResults::Error error;
@@ -68,7 +70,7 @@ bool JSONParser::validate(const std::string &schema_file,
     // Include schema and target file paths for better debugging
     error_message += "\n\nUsing schema file: ";
     error_message += schema_file;
-    error_message += "\nUsing JSON file: ";
+    error_message += "\nUsing JSON file:   ";
     error_message += target_file;
     error_message += "\n";
 
@@ -82,16 +84,18 @@ bool JSONParser::validate(const std::string &schema_file,
   return true;
 }
 
-rapidjson::Document JSONParser::getDocument(std::string_view file_name) const {
-  bool fileExists;
-  fileExists = std::filesystem::exists(file_name);
-  if (!fileExists) {
-    std::string error_message = "\n\nError: File not found: ";
+rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
+
+  if (!std::filesystem::exists(file_name)) {
+    std::string error_message = "\n\nError - file not found: ";
     error_message += file_name;
-    error_message += "\n\nSearching in: ";
-    std::string cwd = std::filesystem::current_path().string();
-    error_message += cwd;
-    error_message += "\n\n";
+    throw JSONParserException(error_message);
+  }
+
+  // Cap file size (minimum)
+  if (std::filesystem::file_size(file_name) > 1048576){
+    std::string error_message = "\n\nError - file larger than 10MB: ";
+    error_message += file_name;
     throw JSONParserException(error_message);
   }
 
@@ -115,19 +119,13 @@ rapidjson::Document JSONParser::getDocument(std::string_view file_name) const {
       }
     }
 
-    std::string error_message = "\n\nError on line ";
+    std::string error_message = "\n\nFile cannot be parsed: ";
+    error_message += file_name;
+    error_message += ".\nError on line  ";
     error_message += std::to_string(lineNumber);
     error_message += ": ";
-
     error_message += rapidjson::GetParseError_En(document.GetParseError());
-
-    error_message += "\nwhile reading ";
-    error_message += file_name;
-
-    error_message += ", opened from: ";
-    std::string cwd = std::filesystem::current_path().string();
-    error_message += cwd;
-    error_message += ".\n\n";
+    error_message += "\n"; // zoek
 
     throw JSONParserException(error_message);
   }

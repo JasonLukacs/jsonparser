@@ -24,13 +24,15 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/demofiles/)
 add_custom_command(
     TARGET demo
     PRE_BUILD
-    COMMAND cp ../demo/demofiles/schema_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    COMMAND cp ../demo/demofiles/json_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    COMMAND cp ../demo/demofiles/schema_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    COMMAND cp ../demo/demofiles/json_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/schema.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/json.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/schema_invalid.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/json_invalid_1.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    COMMAND cp ../demo/demofiles/json_invalid_2.json ${CMAKE_BINARY_DIR}/bin/demofiles/
     
-    DEPENDS ../demo/demofiles/schema_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    DEPENDS ../demo/demofiles/json_correct.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    DEPENDS ../demo/demofiles/schema_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
-    DEPENDS ../demo/demofiles/json_corrupt.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/schema.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/json.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/schema_invalid.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/json_invalid_1.json ${CMAKE_BINARY_DIR}/bin/demofiles/
+    DEPENDS ../demo/demofiles/json_invalid_2.json ${CMAKE_BINARY_DIR}/bin/demofiles/
 )
