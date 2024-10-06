@@ -11,8 +11,8 @@
 #include <filesystem>
 #include <fstream>
 
-bool JSONParser::validate(const std::string &schema_file,
-                          const std::string &target_file) {
+bool JSONParser::validate(const std::string_view schema_file,
+                          const std::string_view target_file) {
 
   // Load files into rapidjson documents.
   rapidjson::Document schemaDocument;
@@ -92,7 +92,7 @@ rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
     throw JSONParserException(error_message);
   }
 
-  // Cap file size (minimum)
+  // Cap file size.
   if (std::filesystem::file_size(file_name) > 1048576){
     std::string error_message = "\n\nError - file larger than 10MB: ";
     error_message += file_name;
