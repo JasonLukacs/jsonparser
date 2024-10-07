@@ -35,6 +35,16 @@ int main() {
   validateNoExceptions("bin/demofiles/schema.json",
                        "bin/demofiles/json_invalid_2.json");
 
+  // One-stop shop:
+  JSONParser JSONparser;
+  rapidjson::Document JSONDocument;
+
+  JSONparser.loadJSON("bin/demofiles/schema.json", "bin/demofiles/json.json",
+                      JSONDocument);
+
+  int val = JSONDocument["exampleKey1"].GetInt();
+  std::cout << val << std::endl;
+  
   // End of demo.
   std::cout << FOOTER << "\nEnd of demo. Goodbye." << std::endl;
   return 0;

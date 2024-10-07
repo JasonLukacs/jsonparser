@@ -7,6 +7,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 set(CMAKE_BUILD_TYPE Release)
 
+# Add profiling flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+
+
 include_directories(
   include/JSONParser
   lib/valijson/include

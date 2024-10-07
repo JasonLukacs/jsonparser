@@ -11,15 +11,15 @@
 #include <filesystem>
 #include <fstream>
 
-bool JSONParser::validate(const std::string_view schema_file,
-                          const std::string_view target_file) {
+bool JSONParser::validate(const std::string_view schemaFile,
+                          const std::string_view jsonFile) {
 
   // Load files into rapidjson documents.
   rapidjson::Document schemaDocument;
   rapidjson::Document targetDocument;
   try {
-    schemaDocument = loadDocument(schema_file);
-    targetDocument = loadDocument(target_file);
+    schemaDocument = loadDocument(schemaFile);
+    targetDocument = loadDocument(jsonFile);
   } catch (const JSONParserException &e) {
     lastError = e.what();
     if (enableExceptions) {
@@ -69,9 +69,9 @@ bool JSONParser::validate(const std::string_view schema_file,
 
     // Include schema and target file paths for better debugging
     error_message += "\n\nUsing schema file: ";
-    error_message += schema_file;
+    error_message += schemaFile;
     error_message += "\nUsing JSON file:   ";
-    error_message += target_file;
+    error_message += jsonFile;
     error_message += "\n";
 
     if (enableExceptions) {
@@ -84,6 +84,7 @@ bool JSONParser::validate(const std::string_view schema_file,
   return true;
 }
 
+
 rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
 
   if (!std::filesystem::exists(file_name)) {
@@ -93,7 +94,7 @@ rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
   }
 
   // Cap file size.
-  if (std::filesystem::file_size(file_name) > 1048576){
+  if (std::filesystem::file_size(file_name) > 1048576) {
     std::string error_message = "\n\nError - file larger than 10MB: ";
     error_message += file_name;
     throw JSONParserException(error_message);
@@ -132,6 +133,86 @@ rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
 
   return document;
 }
+
+bool JSONParser::loadJSON(const std::string_view schemaFile,
+                          const std::string_view jsonFile,
+                          rapidjson::Document &JSONDocument) {
+  // Validate.
+
+  // Load files into rapidjson documents.
+  rapidjson::Document schemaDocument;
+  rapidjson::Document targetDocument;
+  try {
+    schemaDocument = loadDocument(schemaFile);
+    targetDocument = loadDocument(jsonFile);
+  } catch (const JSONParserException &e) {
+    lastError = e.what();
+    if (enableExceptions) {
+      throw JSONParserException(lastError);
+    } else {
+      return false;
+    }
+  }
+
+  // Parse the json schema into an internal schema format.
+  valijson::Schema schema;
+  valijson::SchemaParser parser;
+  valijson::adapters::RapidJsonAdapter schemaDocumentAdapter(schemaDocument);
+  try {
+    parser.populateSchema(schemaDocumentAdapter, schema);
+  } catch (std::runtime_error &e) { // catch what is thrown by valijson.
+    std::string error_message =
+        "Error parsing schema. Library valijson returns: \n";
+    error_message += e.what();
+    if (enableExceptions) {
+      throw JSONParserException(error_message);
+    } else {
+      lastError = error_message;
+      return false;
+    }
+  }
+
+  // Perform validation
+  valijson::Validator validator(valijson::Validator::kStrongTypes);
+  if (valijson::ValidationResults results; !validator.validate(
+          schema, valijson::adapters::RapidJsonAdapter(targetDocument),
+          &results)) {
+    std::string error_message =
+        "\nError - File cannot be validated against schema: ";
+
+    // Iterate through validation errors and gather detailed information
+    valijson::ValidationResults::ValidationResults::Error error;
+    while (results.popError(error)) {
+      // Construct a more informative context string
+      std::string context;
+      for (const std::string &pathElement : error.context) {
+        context += "/" + pathElement;
+      }
+      error_message += "\nContext: " + context + ": ";
+      error_message += error.description;
+    }
+
+    // Include schema and target file paths for better debugging
+    error_message += "\n\nUsing schema file: ";
+    error_message += schemaFile;
+    error_message += "\nUsing JSON file:   ";
+    error_message += jsonFile;
+    error_message += "\n";
+
+    if (enableExceptions) {
+      throw JSONParserException(error_message);
+    } else {
+      lastError = error_message;
+      return false;
+    }
+  }
+  
+  // Load return value
+  JSONDocument = std::move(targetDocument);
+  
+  return true;
+}
+
 
 bool JSONParser::disableExceptions() {
   enableExceptions = false;
