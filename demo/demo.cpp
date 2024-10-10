@@ -15,31 +15,31 @@ void validateNoExceptions(const std::string &schemaFile,
 int main() {
   // Succesful validation against schema.
   std::cout << demo_1Header << std::endl;
-  validate("bin/demofiles/schema.json", "bin/demofiles/json.json");
+  validate("demofiles/schema.json", "demofiles/json.json");
 
   // Missing file.
   std::cout << demo_2Header << std::endl;
-  validate("bin/demofiles/nofile.json", "bin/demofiles/json.json");
+  validate("demofiles/nofile.json", "demofiles/json.json");
 
   // Invalid schema.
   std::cout << demo_3Header << std::endl;
-  validate("bin/demofiles/schema_invalid.json", "bin/demofiles/json.json");
+  validate("demofiles/schema_invalid.json", "demofiles/json.json");
 
   // Invalid json (1), exceptions disabled.
   std::cout << demo_4Header << std::endl;
-  validateNoExceptions("bin/demofiles/schema.json",
-                       "bin/demofiles/json_invalid_1.json");
+  validateNoExceptions("demofiles/schema.json",
+                       "demofiles/json_invalid_1.json");
 
   // Invalid json (2), exceptions disabled.
   std::cout << demo_5Header << std::endl;
-  validateNoExceptions("bin/demofiles/schema.json",
-                       "bin/demofiles/json_invalid_2.json");
+  validateNoExceptions("demofiles/schema.json",
+                       "demofiles/json_invalid_2.json");
 
   // One-stop shop:
   JSONParser JSONparser;
   rapidjson::Document JSONDocument;
 
-  JSONparser.loadJSON("bin/demofiles/schema.json", "bin/demofiles/json.json",
+  JSONparser.loadJSON("demofiles/schema.json", "demofiles/json.json",
                       JSONDocument);
 
   int val = JSONDocument["exampleKey1"].GetInt();
