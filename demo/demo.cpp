@@ -53,8 +53,8 @@ int main() {
 
 // Validation against schema, exceptions enabled (default).
 void validate(const std::string &schemaFile, const std::string &jsonFile) {
+  JSONParser JSONparser;
   try {
-    JSONParser JSONparser;
     JSONparser.validate(schemaFile, jsonFile);
   } catch (const JSONParserException &e) {
     std::cout << FAILURE << "An exception was thrown:" << RESET;
@@ -71,7 +71,7 @@ void validateNoExceptions(const std::string &schemaFile,
   JSONParser JSONparser;
   JSONparser.disableExceptions();
 
-  if (bool validation_result = JSONparser.validate(schemaFile, jsonFile)) {
+  if (JSONparser.validate(schemaFile, jsonFile)) {
     std::cout << SUCCESS << "Validation succesful." << std::endl;
   } else {
     std::cout << FAILURE << "Validation failed:" << RESET << std::endl;
