@@ -11,11 +11,9 @@ class JSONParser {
 public:
   JSONParser() = default;
 
-  bool loadJSON(const std::string_view schemaFile,
-                const std::string_view jsonFile,
-                rapidjson::Document &JSONDocument) ;
-  bool validate(const std::string_view schemaFile,
-                const std::string_view jsonFile);
+  bool loadDocument(const std::string_view schemaFile,
+                    const std::string_view jsonFile,
+                    rapidjson::Document &JSONDocument);
 
   bool disableExceptions();
   std::string getLastError() const;
@@ -24,7 +22,8 @@ private:
   bool enableExceptions = true;
   std::string lastError;
 
-  rapidjson::Document loadDocument(const std::string_view target_file) const;
+  bool loadFile(const std::string_view target_file,
+                rapidjson::Document &JSONDocument) const;
 };
 
 #endif

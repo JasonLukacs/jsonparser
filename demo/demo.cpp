@@ -1,80 +1,77 @@
+// Mandatory include.
 #include "jsonparser.h"
 
-// Includes for demo
+// Includes for demo.
 #include "demostrings.inc"
 #include <iostream>
 
+// Demo functions.
+void demo_start();
+void demo_1();
+void demo_2();
+void demo_end();
 
-// Basic usage is demonstrated in the following functions:
-void validate(const std::string &schemaFile, const std::string &jsonFile);
-void validateNoExceptions(const std::string &schemaFile,
-                          const std::string &jsonFile);
 
-
-// Show example output in various use cases:
+// Run the demos.
 int main() {
-  // Succesful validation against schema.
-  std::cout << demo_1Header << std::endl;
-  validate("demofiles/schema.json", "demofiles/json.json");
+  demo_start();
+  demo_1();
+  demo_2();
+  demo_end();
 
-  // Missing file.
-  std::cout << demo_2Header << std::endl;
-  validate("demofiles/nofile.json", "demofiles/json.json");
-
-  // Invalid schema.
-  std::cout << demo_3Header << std::endl;
-  validate("demofiles/schema_invalid.json", "demofiles/json.json");
-
-  // Invalid json (1), exceptions disabled.
-  std::cout << demo_4Header << std::endl;
-  validateNoExceptions("demofiles/schema.json",
-                       "demofiles/json_invalid_1.json");
-
-  // Invalid json (2), exceptions disabled.
-  std::cout << demo_5Header << std::endl;
-  validateNoExceptions("demofiles/schema.json",
-                       "demofiles/json_invalid_2.json");
-
-  // One-stop shop:
-  JSONParser JSONparser;
-  rapidjson::Document JSONDocument;
-
-  JSONparser.loadJSON("demofiles/schema.json", "demofiles/json.json",
-                      JSONDocument);
-
-  int val = JSONDocument["exampleKey1"].GetInt();
-  std::cout << val << std::endl;
-  
-  // End of demo.
-  std::cout << FOOTER << "\nEnd of demo. Goodbye." << std::endl;
-  return 0;
 } // main
 
 
-// Validation against schema, exceptions enabled (default).
-void validate(const std::string &schemaFile, const std::string &jsonFile) {
+void demo_1() {
+  // Demo 1: Load a schema-validated rapidjson document from a json file.
+  std::cout << demo_1Header << std::endl;
+
   JSONParser JSONparser;
+  rapidjson::Document JSONDocument;
   try {
-    JSONparser.validate(schemaFile, jsonFile);
+    JSONparser.loadDocument("demofiles/schema.json", "demofiles/json.json",
+                            JSONDocument);
   } catch (const JSONParserException &e) {
-    std::cout << FAILURE << "An exception was thrown:" << RESET;
-    std::cout << e.what() << std::endl;
+    std::cout << FAILURE << "An exception occured:\n";
+    std::cout << e.what() << '\n';
     return;
   }
-  std::cout << SUCCESS << "Validation succesful." << std::endl;
+
+  // Success, print json.
+  std::cout << demo_1Success << std::endl;
+
+  int val = JSONDocument["exampleKey1"].GetInt();
+  std::cout << val << std::endl;
+
+  // End of demo 1.
+  std::cout << demo1_Finish << std::endl;
 }
 
 
-// Validation against schema, exceptions disabled.
-void validateNoExceptions(const std::string &schemaFile,
-                          const std::string &jsonFile) {
-  JSONParser JSONparser;
-  JSONparser.disableExceptions();
+void demo_2() {
+  // Demo 2: Invalid schema.
+  std::cout << demo_2Header << std::endl;
 
-  if (JSONparser.validate(schemaFile, jsonFile)) {
-    std::cout << SUCCESS << "Validation succesful." << std::endl;
-  } else {
-    std::cout << FAILURE << "Validation failed:" << RESET << std::endl;
-    std::cout << JSONparser.getLastError() << std::endl;
+  JSONParser JSONparser;
+  rapidjson::Document JSONDocument;
+  try {
+    JSONparser.loadDocument("demofiles/schema_invalid.json",
+                            "demofiles/json.json", JSONDocument);
+  } catch (const JSONParserException &e) {
+    std::cout << FAILURE << "An exception occured:\n" + RESET;
+    std::cout << e.what() << '\n';
   }
+
+  // End of demo 2.
+  std::cout << demo2_Finish << std::endl;
+}
+
+void demo_start() {
+  // Start of demo.
+  std::cout << header << std::endl;
+}
+
+void demo_end() {
+  // End of demo.
+  std::cout << footer << std::endl;
 }

@@ -11,15 +11,16 @@
 #include <filesystem>
 #include <fstream>
 
-bool JSONParser::validate(const std::string_view schemaFile,
-                          const std::string_view jsonFile) {
+bool JSONParser::loadDocument(const std::string_view schemaFile,
+                              const std::string_view jsonFile,
+                              rapidjson::Document &JSONDocument) {
 
   // Load files into rapidjson documents.
   rapidjson::Document schemaDocument;
   rapidjson::Document targetDocument;
   try {
-    schemaDocument = loadDocument(schemaFile);
-    targetDocument = loadDocument(jsonFile);
+    loadFile(schemaFile, schemaDocument);
+    loadFile(jsonFile, targetDocument);
   } catch (const JSONParserException &e) {
     lastError = e.what();
     if (enableExceptions) {
@@ -52,6 +53,8 @@ bool JSONParser::validate(const std::string_view schemaFile,
   if (valijson::ValidationResults results; !validator.validate(
           schema, valijson::adapters::RapidJsonAdapter(targetDocument),
           &results)) {
+    
+    // Failure
     std::string error_message =
         "\nError - File cannot be validated against schema: ";
 
@@ -81,11 +84,15 @@ bool JSONParser::validate(const std::string_view schemaFile,
       return false;
     }
   }
+
+  // Success
+  JSONDocument = std::move(targetDocument);
   return true;
 }
 
 
-rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
+bool JSONParser::loadFile(const std::string_view file_name,
+                          rapidjson::Document &JSONDocument) const {
 
   if (!std::filesystem::exists(file_name)) {
     std::string error_message = "\n\nError - file not found: ";
@@ -131,85 +138,7 @@ rapidjson::Document JSONParser::loadDocument(std::string_view file_name) const {
     throw JSONParserException(error_message);
   }
 
-  return document;
-}
-
-bool JSONParser::loadJSON(const std::string_view schemaFile,
-                          const std::string_view jsonFile,
-                          rapidjson::Document &JSONDocument) {
-  // Validate.
-
-  // Load files into rapidjson documents.
-  rapidjson::Document schemaDocument;
-  rapidjson::Document targetDocument;
-  try {
-    schemaDocument = loadDocument(schemaFile);
-    targetDocument = loadDocument(jsonFile);
-  } catch (const JSONParserException &e) {
-    lastError = e.what();
-    if (enableExceptions) {
-      throw JSONParserException(lastError);
-    } else {
-      return false;
-    }
-  }
-
-  // Parse the json schema into an internal schema format.
-  valijson::Schema schema;
-  valijson::SchemaParser parser;
-  valijson::adapters::RapidJsonAdapter schemaDocumentAdapter(schemaDocument);
-  try {
-    parser.populateSchema(schemaDocumentAdapter, schema);
-  } catch (std::runtime_error &e) { // catch what is thrown by valijson.
-    std::string error_message =
-        "Error parsing schema. Library valijson returns: \n";
-    error_message += e.what();
-    if (enableExceptions) {
-      throw JSONParserException(error_message);
-    } else {
-      lastError = error_message;
-      return false;
-    }
-  }
-
-  // Perform validation
-  valijson::Validator validator(valijson::Validator::kStrongTypes);
-  if (valijson::ValidationResults results; !validator.validate(
-          schema, valijson::adapters::RapidJsonAdapter(targetDocument),
-          &results)) {
-    std::string error_message =
-        "\nError - File cannot be validated against schema: ";
-
-    // Iterate through validation errors and gather detailed information
-    valijson::ValidationResults::ValidationResults::Error error;
-    while (results.popError(error)) {
-      // Construct a more informative context string
-      std::string context;
-      for (const std::string &pathElement : error.context) {
-        context += "/" + pathElement;
-      }
-      error_message += "\nContext: " + context + ": ";
-      error_message += error.description;
-    }
-
-    // Include schema and target file paths for better debugging
-    error_message += "\n\nUsing schema file: ";
-    error_message += schemaFile;
-    error_message += "\nUsing JSON file:   ";
-    error_message += jsonFile;
-    error_message += "\n";
-
-    if (enableExceptions) {
-      throw JSONParserException(error_message);
-    } else {
-      lastError = error_message;
-      return false;
-    }
-  }
-  
-  // Load return value
-  JSONDocument = std::move(targetDocument);
-  
+  JSONDocument = std::move(document);
   return true;
 }
 
@@ -219,5 +148,6 @@ bool JSONParser::disableExceptions() {
 
   return true;
 }
+
 
 std::string JSONParser::getLastError() const { return lastError; }
