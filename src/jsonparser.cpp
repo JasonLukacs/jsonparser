@@ -23,7 +23,7 @@ bool JSONParser::loadDocument(const std::string_view schemaFile,
     loadFile(jsonFile, targetDocument);
   } catch (const JSONParserException &e) {
     lastError = e.what();
-    if (enableExceptions) {
+    if (useExceptions) {
       throw JSONParserException(lastError);
     } else {
       return false;
@@ -40,7 +40,7 @@ bool JSONParser::loadDocument(const std::string_view schemaFile,
     std::string error_message =
         "Error parsing schema. Library valijson returns: \n";
     error_message += e.what();
-    if (enableExceptions) {
+    if (useExceptions) {
       throw JSONParserException(error_message);
     } else {
       lastError = error_message;
@@ -77,7 +77,7 @@ bool JSONParser::loadDocument(const std::string_view schemaFile,
     error_message += jsonFile;
     error_message += "\n";
 
-    if (enableExceptions) {
+    if (useExceptions) {
       throw JSONParserException(error_message);
     } else {
       lastError = error_message;
@@ -143,8 +143,8 @@ bool JSONParser::loadFile(const std::string_view file_name,
 }
 
 
-bool JSONParser::disableExceptions() {
-  enableExceptions = false;
+bool JSONParser::enableExceptions(bool enable) {
+  useExceptions = enable;
 
   return true;
 }

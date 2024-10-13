@@ -15,11 +15,11 @@ public:
                     const std::string_view jsonFile,
                     rapidjson::Document &JSONDocument);
 
-  bool disableExceptions();
+  bool enableExceptions(bool enable);
   std::string getLastError() const;
 
 private:
-  bool enableExceptions = true;
+  bool useExceptions = false;
   std::string lastError;
 
   bool loadFile(const std::string_view target_file,
