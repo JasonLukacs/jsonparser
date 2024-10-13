@@ -18,22 +18,22 @@ int main() {
   rapidjson::Document JSONDocument;
   if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json.json",
                               JSONDocument)) {
-    std::cout << demo_1Success << std::endl;
+    std::cout << demo_1_Success << std::endl;
     std::cout << JSONDocument["exampleKey1"].GetString() << std::endl;
     std::cout << JSONDocument["exampleKey2"].GetInt() << std::endl;
   } else {
-    std::cout << demo_1Failure << std::endl;
+    std::cout << demo_1_Failure << std::endl;
     std::cout << JSONparser.getLastError() << '\n';
   }
 
-  std::cout << demo1_Finish << std::endl;
+  std::cout << demo_1_Finish << std::endl;
   /***********************************************************************/
 
 
   /***********************************************************************/
   /* Demo 2: Load an invalid schema with exceptions enabled.             */
   /***********************************************************************/
-  std::cout << demo_2Header << std::endl;
+  std::cout << demo_2_Header << std::endl;
 
   JSONparser.enableExceptions(true);
 
@@ -41,12 +41,49 @@ int main() {
     JSONparser.loadDocument("demofiles/schema_invalid.json",
                             "demofiles/json.json", JSONDocument);
   } catch (const JSONParserException &e) {
-    std::cout << demo_2Failure << std::endl;
+    std::cout << demo_2_Failure << std::endl;
     std::cout << e.what() << '\n';
   }
 
-  std::cout << demo2_Finish << std::endl;
+  std::cout << demo_2_Finish << std::endl;
   /***********************************************************************/
+
+
+  /***********************************************************************/
+  /* Demo 3: Load an invalid json file, no exceptions.                   */
+  /***********************************************************************/
+  std::cout << demo_3_Header << std::endl;
+
+  JSONparser.enableExceptions(false); // Only required if previously set to true.
+
+  if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json_invalid_1.json",
+                              JSONDocument)) {
+    // Handle success.
+  } else {
+    std::cout << demo_3_Failure << std::endl;
+    std::cout << JSONparser.getLastError() << '\n';
+  }
+
+  std::cout << demo_3_Finish << std::endl;
+  /***********************************************************************/
+
+
+  /***********************************************************************/
+  /* Demo 4: Load another invalid json file, no exceptions.                   */
+  /***********************************************************************/
+  std::cout << demo_4_Header << std::endl;
+
+  if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json_invalid_2.json",
+                              JSONDocument)) {
+    // Handle success.
+  } else {
+    std::cout << demo_4_Failure << std::endl;
+    std::cout << JSONparser.getLastError() << '\n';
+  }
+
+  std::cout << demo_4_Finish << std::endl;
+  /***********************************************************************/
+
 
   std::cout << footer << std::endl;
 } // main

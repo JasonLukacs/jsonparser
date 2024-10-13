@@ -1,13 +1,13 @@
 {
-  "exampleKey1": 10,
-  "exampleKey2": "Some text.",
+  "exampleKey1": "Example string",
   "exampleObject": {
     "nestedObject1": {
       "exampleKey1": "Some text.",
       "exampleKey2": 20
     }, 
     "nestedObject2": {
-      "exampleKey1": "Some text."
+      "exampleKey1": "Some text.",
+      "exampleKey2": 30
     }
   }
 }
