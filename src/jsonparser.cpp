@@ -127,13 +127,12 @@ bool JSONParser::loadFile(const std::string_view file_name,
       }
     }
 
-    std::string error_message = "\n\nFile cannot be parsed: ";
+    std::string error_message = "File cannot be parsed: ";
     error_message += file_name;
     error_message += ".\nError on line  ";
     error_message += std::to_string(lineNumber);
     error_message += ": ";
     error_message += rapidjson::GetParseError_En(document.GetParseError());
-    error_message += "\n"; // zoek
 
     throw JSONParserException(error_message);
   }
