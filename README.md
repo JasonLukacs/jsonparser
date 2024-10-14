@@ -26,8 +26,7 @@ Basic usage boils down to:
 JSONParser JSONparser;
 rapidjson::Document JSONDocument;
 
-if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json.json",
-                            JSONDocument)) {
+if (JSONparser.loadDocument("schema.json", "json.json", JSONDocument)) {
   // Handle success.
 } else {
   // Handle failure.
@@ -42,8 +41,7 @@ To check for success you can do something like:
 JSONParser JSONparser;
 rapidjson::Document JSONDocument;
 
-if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json.json",
-                            JSONDocument)) {
+if (JSONparser.loadDocument("schema.json", "json.json", JSONDocument)) {
   // Success:
   std::cout << JSONDocument["exampleKey1"].GetString() << std::endl;
   std::cout << JSONDocument["exampleKey2"].GetInt() << std::endl;
@@ -63,17 +61,16 @@ rapidjson::Document JSONDocument;
 JSONparser.enableExceptions(true);
 
 try {
-  JSONparser.loadDocument("demofiles/schema_invalid.json",
-                          "demofiles/json.json", JSONDocument);
+  JSONparser.loadDocument("schema.json", "json.json", JSONDocument);
 } catch (const JSONParserException &e) {
-  std::cout << d2Failure << std::endl;
+  // Failure.
   std::cout << e.what() << '\n';
 }
 // Handle success.
 
 ```
 
-## Also see:
-# The giants on whose shoulders we stand:
+# Also see:
+## The giants on whose shoulders we stand:
 * [RapidJSON GitHub](https://github.com/Tencent/rapidjson/)
 * [Valijson GitHub](https://github.com/tristanpenman/valijson/)
