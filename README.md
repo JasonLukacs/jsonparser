@@ -15,7 +15,8 @@ Study, build and run example program ``` demo.cpp```:
 ```console
 cd build
 make
-bin/demo
+cd bin
+./demo
 ```
 
 ## Also see:
