@@ -19,7 +19,22 @@ cd bin
 ./demo
 ```
 
+Basic usage boils down to:
+```console
+#include "jsonparser.h"
+
+JSONParser JSONparser;
+rapidjson::Document JSONDocument;
+
+if (JSONparser.loadDocument("demofiles/schema.json", "demofiles/json.json",
+                            JSONDocument)) {
+// Handle success.
+} else {
+// Handle failure.
+}
+```
+
 ## Also see:
+# The giants on whose shoulders we stand:
 * [RapidJSON GitHub](https://github.com/Tencent/rapidjson/)
 * [Valijson GitHub](https://github.com/tristanpenman/valijson/)
-which are the giants on whose shoulders we stand.
