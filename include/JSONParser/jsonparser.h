@@ -1,11 +1,9 @@
-#ifndef JSON_H
-#define JSON_H
+#ifndef JSONPARSER_H
+#define JSONPARSER_H
 
 #include "exceptions.h"
 #include <rapidjson/document.h>
 #include <string>
-
-#define VALIJSON_USE_EXCEPTIONS
 
 class JSONParser {
 public:
@@ -14,7 +12,6 @@ public:
   bool loadDocument(const std::string_view schemaFile,
                     const std::string_view jsonFile,
                     rapidjson::Document &JSONDocument);
-
   bool enableExceptions(bool enable);
   std::string getLastError() const;
 

@@ -11,6 +11,9 @@
 #include <filesystem>
 #include <fstream>
 
+#define VALIJSON_USE_EXCEPTIONS
+
+// Public.
 bool JSONParser::loadDocument(const std::string_view schemaFile,
                               const std::string_view jsonFile,
                               rapidjson::Document &JSONDocument) {
@@ -53,10 +56,10 @@ bool JSONParser::loadDocument(const std::string_view schemaFile,
   if (valijson::ValidationResults results; !validator.validate(
           schema, valijson::adapters::RapidJsonAdapter(targetDocument),
           &results)) {
-    
+
     // Failure
     std::string error_message =
-        "\nError - File cannot be validated against schema: ";
+        "Error - File cannot be validated against schema: ";
 
     // Iterate through validation errors and gather detailed information
     valijson::ValidationResults::ValidationResults::Error error;
@@ -91,6 +94,17 @@ bool JSONParser::loadDocument(const std::string_view schemaFile,
 }
 
 
+bool JSONParser::enableExceptions(bool enable) {
+  useExceptions = enable;
+
+  return true;
+}
+
+
+std::string JSONParser::getLastError() const { return lastError; }
+
+
+// Private.
 bool JSONParser::loadFile(const std::string_view file_name,
                           rapidjson::Document &JSONDocument) const {
 
@@ -141,12 +155,3 @@ bool JSONParser::loadFile(const std::string_view file_name,
   return true;
 }
 
-
-bool JSONParser::enableExceptions(bool enable) {
-  useExceptions = enable;
-
-  return true;
-}
-
-
-std::string JSONParser::getLastError() const { return lastError; }
