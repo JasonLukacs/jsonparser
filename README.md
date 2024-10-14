@@ -1,5 +1,5 @@
 ## jsonparser 
-A simple json parser / validator using rapidjson and valijson
+A simple json parser / validator using rapidjson and valijson.
 
 ### Usage:
 * Clone the repo:  
@@ -22,3 +22,4 @@ cd bin
 ## Also see:
 * [RapidJSON GitHub](https://github.com/Tencent/rapidjson/)
 * [Valijson GitHub](https://github.com/tristanpenman/valijson/)
+which are the giants on whose shoulders we stand.
