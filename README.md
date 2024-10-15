@@ -1,7 +1,8 @@
 # jsonparser 
-A simple json parser / validator using rapidjson and valijson.
+Wrapping rapidjson and valijson:  
+Load a schema validated rapidjson document in one function call.  
 
-# Build:  
+## Build:  
 Clone the repo:  
 ```console
 git clone https://github.com/JasonLukacs/jsonparser.git  
@@ -30,21 +31,21 @@ Build and run example program ``` demo```.
   cmake -G Ninja ..
   ninja
   ```
-  Executable and demo-files are in /build/bin:
+  Executable and demo JSON files are in /build/bin:
   ```console
   cd bin
   ./demo
   ```
 
-# Basic usage
+## Basic usage
 Boils down to:
 ```console
 #include "jsonparser.h"
 
-JSONParser JSONparser;
-rapidjson::Document JSONDocument;
+JSONParser parser;
+rapidjson::Document myDocument;
 
-if (JSONparser.loadDocument("schema.json", "json.json", JSONDocument)) {
+if (parser.loadDocument("schema.json", "json.json", myDocument)) {
   // Handle success.
 } else {
   // Handle failure.
@@ -56,16 +57,16 @@ To check for success you can do something like:
 ```console
 #include "jsonparser.h"
 
-JSONParser JSONparser;
-rapidjson::Document JSONDocument;
+JSONParser parser;
+rapidjson::Document myDocument;
 
-if (JSONparser.loadDocument("schema.json", "json.json", JSONDocument)) {
+if (parser.loadDocument("schema.json", "json.json", myDocument)) {
   // Success:
-  std::cout << JSONDocument["exampleKey1"].GetString() << std::endl;
-  std::cout << JSONDocument["exampleKey2"].GetInt() << std::endl;
+  std::cout << myDocument["exampleKey1"].GetString() << std::endl;
+  std::cout << myDocument["exampleKey2"].GetInt() << std::endl;
 } else {
   // Failure:
-  std::cout << JSONparser.getLastError() << '\n';
+  std::cout << parser.getLastError() << '\n';
 }
 ```
 
@@ -73,13 +74,13 @@ Alternatively, you can enable exceptions and do something like:
 ```console
 #include "jsonparser.h"
 
-JSONParser JSONparser;
-rapidjson::Document JSONDocument;
+JSONParser parser;
+rapidjson::Document myDocument;
 
-JSONparser.enableExceptions(true);
+parser.enableExceptions(true);
 
 try {
-  JSONparser.loadDocument("schema.json", "json.json", JSONDocument);
+  parser.loadDocument("schema.json", "json.json", myDocument);
 } catch (const JSONParserException &e) {
   // Failure.
   std::cout << e.what() << '\n';
