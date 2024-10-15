@@ -10,6 +10,7 @@ git clone https://github.com/JasonLukacs/jsonparser.git
   
 Initialize the submodules:  
 ```console
+cd jsonparser
 git submodule update --init
 ```
   
