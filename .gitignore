@@ -1,5 +1,5 @@
 # Explicitly exclude project files / directories
-build/
+build/*
 lib/
 
 # MacOs

@@ -1,25 +1,43 @@
-## jsonparser 
+# jsonparser 
 A simple json parser / validator using rapidjson and valijson.
 
-### Usage:
-* Clone the repo:  
-    git clone https://github.com/JasonLukacs/jsonparser.git  
-  
-* Initialize the submodules:  
-    git submodule update --init
-  
-_Note: The submodules contain pretty large nested submodules which are not required,_  
-_so you may want to avoid --recurse-submodules / --recursive._
-  
-Study, build and run example program ``` demo.cpp```:
+# Build:  
+Clone the repo:  
 ```console
-cd build
-make
-cd bin
-./demo
+git clone https://github.com/JasonLukacs/jsonparser.git  
 ```
+  
+Initialize the submodules:  
+```console
+git submodule update --init
+```
+  
+_Note: The submodules contain pretty large nested submodules which are not required,  
+so you may want to avoid --recurse-submodules / --recursive._
+  
+Build and run example program ``` demo```.
 
-Basic usage boils down to:
+  Using make:
+  ```console
+  cd build
+  cmake ..
+  make
+  ```
+
+  Using ninja:
+  ```console
+  cd build
+  cmake -G Ninja ..
+  ninja
+  ```
+  Executable and demo-files are in /build/bin:
+  ```console
+  cd bin
+  ./demo
+  ```
+
+# Basic usage
+Boils down to:
 ```console
 #include "jsonparser.h"
 
@@ -71,6 +89,6 @@ try {
 ```
 
 # Also see:
-## The giants on whose shoulders we stand:
+The giants on whose shoulders we stand:
 * [RapidJSON GitHub](https://github.com/Tencent/rapidjson/)
 * [Valijson GitHub](https://github.com/tristanpenman/valijson/)
