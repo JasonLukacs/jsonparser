@@ -2,13 +2,12 @@ cmake_minimum_required(VERSION 3.15)
 project(jsonparser)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
-set(CMAKE_BUILD_TYPE Release)
 
 # Add profiling flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 include_directories(
   include/JSONParser
@@ -20,6 +19,7 @@ add_executable(demo
   demo/demo.cpp  
   src/jsonparser.cpp
 )
+
 add_dependencies(demo copy-files)
 
 # Copy demo files.
